@@ -16,6 +16,10 @@ const rooms = [
   },
 ]
 
+app.get('/', function(req, res) {
+  res.json({ message: 'Server alive' })
+})
+
 io.on('connect', function(socket) {
   io.emit('fetch-rooms', rooms)
 
