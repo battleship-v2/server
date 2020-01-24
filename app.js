@@ -52,8 +52,8 @@ io.on('connect', function(socket) {
   })
 
   socket.on('turn', function(room) {
-    room.players[0] === false
-    room.players[1] === true
+    room.players[0].hisTurn = false
+    room.players[1].hisTurn = true
     io.in(room.name).emit('change-turn', room)
   })
 
@@ -72,6 +72,12 @@ io.on('connect', function(socket) {
         player2: room.players[1].score,
       },
     }
+
+    let index = rooms.findIndex(room => room.name === room.name)
+
+    rooms[index].players = []
+
+    socket.leave(room.name)
 
     io.in(room.name).emit('end-result', result)
   })
