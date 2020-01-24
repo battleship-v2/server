@@ -36,8 +36,13 @@ io.on('connect', function(socket) {
       hisTurn: false,
     })
 
+    console.log(rooms)
+    console.log('==============================================')
+    console.log(rooms[index])
+
     socket.join(payload.roomName)
-    io.to(payload.roomName).emit('update-room', rooms[index])
+    // io.to(payload.roomName).emit('update-room', rooms[index])
+    io.emit('fetch-rooms', rooms)
   })
 
   socket.on('game', function(room) {
@@ -47,29 +52,38 @@ io.on('connect', function(socket) {
   })
 
   socket.on('turn', function(room) {
-      room.players[0] === false
-      room.players[1] === true
-      io.in(room.name).emit('change-turn', room)
+    room.players[0].hisTurn = false
+    room.players[1].hisTurn = true
+    io.in(room.name).emit('change-turn', room)
   })
 
   socket.on('end', function(room) {
-      let text = ''
-      if(room.players[0].score > room.players[1].score) {
-        text = `${room.players[0].name} Win the game with score ${room.players[0].score}`
-      }else {
-        text = `${room.players[1].name} Win the game with score ${room.players[1].score}`
-      }
+    let text = ''
+    if (room.players[0].score > room.players[1].score) {
+      text = `${room.players[0].name} Win the game with score ${room.players[0].score}`
+    } else {
+      text = `${room.players[1].name} Win the game with score ${room.players[1].score}`
+    }
 
-      const result = {
-          text: text,
-          score : {
-              player1: room.players[0].score,
-              player2: room.players[1].score
-          }
-      }
+    const result = {
+      text: text,
+      score: {
+        player1: room.players[0].score,
+        player2: room.players[1].score,
+      },
+    }
 
-      io.in(room.name).emit('end-result', result)
-      
+    let index = rooms.findIndex(room => room.name === room.name)
+
+    rooms[index].players = []
+
+    socket.leave(room.name)
+
+    io.in(room.name).emit('end-result', result)
+  })
+
+  socket.on('request-rooms', function() {
+    io.emit('fetch-rooms', rooms)
   })
 })
 
