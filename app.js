@@ -25,7 +25,7 @@ io.on('connect', function(socket) {
 
   socket.on('create-room', function(payload) {
     rooms.push({ name: payload, players: [], isPlaying: false })
-    io.emit('fetch_rooms', rooms)
+    io.emit('fetch-rooms', rooms)
   })
 
   socket.on('join-room', function(payload) {
