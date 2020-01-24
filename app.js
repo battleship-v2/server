@@ -37,7 +37,8 @@ io.on('connect', function(socket) {
     })
 
     socket.join(payload.roomName)
-    io.to(payload.roomName).emit('update-room', rooms[index])
+    // io.to(payload.roomName).emit('update-room', rooms[index])
+    io.emit('fetch-rooms', rooms)
   })
 })
 
