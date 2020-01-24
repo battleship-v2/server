@@ -71,6 +71,10 @@ io.on('connect', function(socket) {
 
     io.in(room.name).emit('end-result', result)
   })
+
+  socket.on('request-rooms', function() {
+    io.emit('fetch-rooms', rooms)
+  })
 })
 
 server.listen(port, () => console.log('listening on port', port))
