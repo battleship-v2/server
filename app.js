@@ -48,29 +48,28 @@ io.on('connect', function(socket) {
   })
 
   socket.on('turn', function(room) {
-      room.players[0] === false
-      room.players[1] === true
-      io.in(room.name).emit('change-turn', room)
+    room.players[0] === false
+    room.players[1] === true
+    io.in(room.name).emit('change-turn', room)
   })
 
   socket.on('end', function(room) {
-      let text = ''
-      if(room.players[0].score > room.players[1].score) {
-        text = `${room.players[0].name} Win the game with score ${room.players[0].score}`
-      }else {
-        text = `${room.players[1].name} Win the game with score ${room.players[1].score}`
-      }
+    let text = ''
+    if (room.players[0].score > room.players[1].score) {
+      text = `${room.players[0].name} Win the game with score ${room.players[0].score}`
+    } else {
+      text = `${room.players[1].name} Win the game with score ${room.players[1].score}`
+    }
 
-      const result = {
-          text: text,
-          score : {
-              player1: room.players[0].score,
-              player2: room.players[1].score
-          }
-      }
+    const result = {
+      text: text,
+      score: {
+        player1: room.players[0].score,
+        player2: room.players[1].score,
+      },
+    }
 
-      io.in(room.name).emit('end-result', result)
-      
+    io.in(room.name).emit('end-result', result)
   })
 })
 
