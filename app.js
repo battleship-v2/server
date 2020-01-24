@@ -36,6 +36,10 @@ io.on('connect', function(socket) {
       hisTurn: false,
     })
 
+    console.log(rooms)
+    console.log('==============================================')
+    console.log(rooms[index])
+
     socket.join(payload.roomName)
     // io.to(payload.roomName).emit('update-room', rooms[index])
     io.emit('fetch-rooms', rooms)
